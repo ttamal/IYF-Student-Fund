@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Banking Website</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+        <div id="balance"></div>
+        <form id="transactionForm">
+            <input type="number" id="amount" placeholder="Amount">
+            <button type="submit">Deposit</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input, button {
+    margin: 5px;
+    padding: 8px;
+}
+
+button {
+    cursor: pointer;
+}
+
+#balance {
+    margin-top: 20px;
+}
+// Dummy data
+let currentUser = null;
+let balance = 0;
+
+// Functions
+function login(username, password) {
+    // Here you would typically validate credentials against a database
+    if (username === "user" && password === "password") {
+        currentUser = username;
+        updateBalance();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function deposit(amount) {
+    balance += amount;
+    updateBalance();
+}
+
+function updateBalance() {
+    document.getElementById("balance").innerText = `Balance: $${balance}`;
+}
+
+// Event Listeners
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    if (login(username, password)) {
+        document.getElementById("transactionForm").style.display = "block";
+    } else {
+        alert("Invalid username or password");
+    }
+});
+
+document.getElementById("transactionForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const amount = parseFloat(document.getElementById("amount").value);
+    if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid amount");
+    } else {
+        deposit(amount);
+    }
+});
